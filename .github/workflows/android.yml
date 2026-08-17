@@ -11,9 +11,7 @@ jobs:
       - name: Download Arnis source package
         run: |
           mkdir -p source
-          curl -L \
-            "https://github.com/Ht600/arnis-android/raw/main/arnis-3.0.0-android-final.zip" \
-            -o source/arnis.zip
+          curl -L "https://github.com/Ht600/arnis-android/raw/main/arnis-3.0.0-android-final.zip" -o source/arnis.zip
 
       - name: Extract source
         run: |
@@ -34,7 +32,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
@@ -42,14 +40,14 @@ jobs:
       - name: Install Android SDK packages
         run: |
           sdkmanager "platform-tools" \
-                     "platforms;android-35" \
-                     "build-tools;35.0.0" \
-                     "ndk;27.2.12479018"
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
+            "ndk;29.0.14206865"
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2"
@@ -57,6 +55,7 @@ jobs:
       - name: Initialize Android project
         working-directory: source/extracted
         run: |
+          rm -rf src-tauri/gen/android
           cargo tauri android init
 
       - name: Build APK
@@ -68,6 +67,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: arnis-android-apk
-          path: |
-            source/extracted/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
-            source/extracted/src-tauri/gen/android/app/build/outputs/apk/**/*.APK
+          path: source/extracted/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
