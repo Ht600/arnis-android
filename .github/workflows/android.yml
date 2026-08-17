@@ -55,7 +55,7 @@ jobs:
       - name: Initialize Android project
         working-directory: source/extracted
         run: |
-          rm -rf src-tauri/gen/android
+          rm -rf gen/android
           cargo tauri android init
 
       - name: Build APK
@@ -67,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: arnis-android-apk
-          path: source/extracted/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+          path: source/extracted/gen/android/app/build/outputs/apk/**/*.apk
